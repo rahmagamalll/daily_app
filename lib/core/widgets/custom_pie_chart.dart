@@ -6,7 +6,7 @@ import 'package:pie_chart/pie_chart.dart';
 
 // ignore: must_be_immutable
 class CustomPieChart extends StatelessWidget {
-  CustomPieChart({
+  const CustomPieChart({
     super.key,
     required this.finalDegreeOf100,
     required this.monthlyexams,

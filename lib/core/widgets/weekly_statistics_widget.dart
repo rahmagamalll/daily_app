@@ -5,11 +5,6 @@ import '../../services/weekly_statistics_service.dart';
 class WeeklyStatisticsWidget extends StatelessWidget {
   const WeeklyStatisticsWidget({super.key});
 
-  Future<List<WeeklyStatistics>> _refreshAndGetStats() async {
-    await WeeklyStatisticsService.saveWeeklyStatistics();
-    return WeeklyStatisticsService.getAllWeeklyStatistics();
-  }
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<WeeklyStatistics>>(
@@ -66,8 +61,7 @@ class WeeklyStatisticsWidget extends StatelessWidget {
             const SizedBox(height: 20),
             ...weeklyStats.reversed
                 .skip(1)
-                .map((stats) => _buildPreviousWeekStats(stats))
-                .toList(),
+                .map((stats) => _buildPreviousWeekStats(stats)),
           ],
         );
       },
@@ -171,18 +165,12 @@ class WeeklyStatisticsWidget extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               habitName,
-              style: const TextStyle(
-                fontFamily: 'Nunito',
-                fontSize: 16,
-              ),
+              style: const TextStyle(fontFamily: 'Nunito', fontSize: 16),
             ),
             const SizedBox(height: 4),
             Text(
               'Count: $count',
-              style: const TextStyle(
-                fontFamily: 'Nunito',
-                fontSize: 14,
-              ),
+              style: const TextStyle(fontFamily: 'Nunito', fontSize: 14),
             ),
           ],
         ),

@@ -4,6 +4,7 @@ import 'package:daily_app/features/home/data/models/habit_model.dart';
 import 'package:daily_app/main.dart';
 import 'package:hive/hive.dart';
 import 'package:meta/meta.dart';
+import '../../../../services/weekly_statistics_service.dart';
 
 part 'add_habit_state.dart';
 
@@ -15,6 +16,7 @@ class AddHabitCubit extends Cubit<AddHabitState> {
       var habitBox = Hive.box<Habit>(Constants.hiveHabitNameBox);
       await habitBox.add(habit);
       await storeHabitsAtStartOfDay();
+      await WeeklyStatisticsService.saveWeeklyStatistics();
       print('Habit added: ${habit.name}');
 
       emit(AddHabitSuccess(message: 'Habit added successfully'));
