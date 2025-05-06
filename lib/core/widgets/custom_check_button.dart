@@ -40,7 +40,7 @@ class CustomCheckButton extends StatelessWidget {
           ),
         ),
         horizontalSpacing(8),
-        Text(label, style: TextStylesManager.font14MediumGrayRegular),
+        Text(label, style: TextStylesManager.font14Medium(context)),
       ],
     );
   }

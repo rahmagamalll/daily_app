@@ -1,4 +1,3 @@
-import 'package:daily_app/core/theming/colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextFormField extends StatelessWidget {
@@ -37,8 +36,18 @@ class CustomTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    final borderColor = readOnly
+        ? theme.disabledColor
+        : theme.inputDecorationTheme.enabledBorder?.borderSide.color ??
+            colorScheme.outline;
+
+    final focusedBorderColor =
+        readOnly ? theme.disabledColor : colorScheme.primary;
+
     return TextFormField(
-      // Ensure maxLines is 1 if obscureText is true
       maxLines: obscureText ? 1 : maxLines,
       readOnly: readOnly,
       focusNode: focusNode,
@@ -46,48 +55,26 @@ class CustomTextFormField extends StatelessWidget {
       onChanged: onChanged,
       obscureText: obscureText,
       validator: validator,
-      cursorColor: ColorsManager.primaryColor,
+      cursorColor: colorScheme.primary,
       decoration: InputDecoration(
         hintText: hintText,
-        hintStyle: hintStyle,
+        hintStyle: hintStyle ?? TextStyle(color: theme.hintColor),
         contentPadding: contentPadding,
-        enabledBorder: readOnly
-            ? OutlineInputBorder(
-                borderRadius: borderRadius,
-                borderSide: const BorderSide(
-                  color: ColorsManager.midLighterGrey,
-                ),
-              )
-            : OutlineInputBorder(
-                borderRadius: borderRadius,
-                borderSide: const BorderSide(
-                  color: ColorsManager.softGrey,
-                ),
-              ),
-        focusedBorder: readOnly
-            ? OutlineInputBorder(
-                borderRadius: borderRadius,
-                borderSide: const BorderSide(
-                    color: ColorsManager.midLighterGrey, width: 1.2),
-              )
-            : OutlineInputBorder(
-                borderRadius: borderRadius,
-                borderSide: BorderSide(
-                    color: ColorsManager.primaryColor, width: 1.2),
-              ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: borderRadius,
+          borderSide: BorderSide(color: borderColor),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: borderRadius,
+          borderSide: BorderSide(color: focusedBorderColor, width: 1.2),
+        ),
         errorBorder: OutlineInputBorder(
           borderRadius: borderRadius,
-          borderSide: const BorderSide(
-            color: ColorsManager.red,
-            width: 1.2,
-          ),
+          borderSide: BorderSide(color: colorScheme.error, width: 1.2),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: borderRadius,
-          borderSide: const BorderSide(
-            color: ColorsManager.red,
-            width: 1.2,
-          ),
+          borderSide: BorderSide(color: colorScheme.error, width: 1.2),
         ),
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,

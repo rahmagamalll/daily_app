@@ -1,33 +1,55 @@
-
-import 'package:daily_app/core/routing/app_router.dart';
-import 'package:daily_app/core/routing/routes.dart';
-import 'package:daily_app/core/theming/colors.dart';
+import 'package:daily_app/core/helper/share_pref_helper.dart';
+import 'package:daily_app/core/helper/shared_pref_keys.dart';
+import 'package:daily_app/features/home/ui/home_screen.dart';
+import 'package:daily_app/features/profile/ui/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class DailyApp extends StatelessWidget {
-  const DailyApp({super.key, required this.isLogin});
+class DailyApp extends StatefulWidget {
+  final bool isdark;
   final bool isLogin;
+
+  const DailyApp({super.key, required this.isdark, required this.isLogin});
+
+  @override
+  State<DailyApp> createState() => _DailyAppState();
+}
+
+class _DailyAppState extends State<DailyApp> {
+  late bool isDark;
+
+  @override
+  void initState() {
+    super.initState();
+    isDark = widget.isdark;
+  }
+
+  void toggleTheme(bool value) {
+    setState(() {
+      isDark = value;
+    });
+    SharePrefHelper.setData(SharedPrefKeys.isdark, value);
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-        designSize: const Size(360, 690),
-        minTextAdapt: true,
-        splitScreenMode: true,
-        child: MaterialApp(
+      designSize: const Size(375, 812),
+      builder: (context, child) {
+        return MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-            scaffoldBackgroundColor: ColorsManager.white,
-            appBarTheme: const AppBarTheme(
-              backgroundColor: Color.fromARGB(255, 170, 47, 47),
-            ),
-            textSelectionTheme: TextSelectionThemeData(
-              selectionHandleColor: ColorsManager.primaryColor,
-            ),
+            brightness: Brightness.light,
           ),
-          onGenerateRoute: AppRouter.generateRoute,
-          initialRoute:
-              isLogin == true ? Routes.homeScreen : Routes.loginScreen,
-        ));
+          darkTheme: ThemeData(
+            brightness: Brightness.dark,
+          ),
+          themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
+          home: widget.isLogin
+              ? HomeScreen(toggleTheme: toggleTheme)
+              : LoginScreen(),
+        );
+      },
+    );
   }
 }

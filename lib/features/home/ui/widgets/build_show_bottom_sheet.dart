@@ -3,10 +3,13 @@ import 'package:daily_app/features/home/logic/all_habit/all_habit_cubit.dart';
 import 'package:daily_app/features/home/ui/widgets/add_habit_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-class BuildShowBottomSheet extends StatelessWidget {
-  final AllHabitCubit allHabitCubit;
 
-  const BuildShowBottomSheet({super.key, required this.allHabitCubit});
+// ignore: must_be_immutable
+class BuildShowBottomSheet extends StatelessWidget {
+   BuildShowBottomSheet({required this.context,
+    super.key,
+  });
+  BuildContext context;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +26,7 @@ class BuildShowBottomSheet extends StatelessWidget {
             listener: (context, state) {
               if (state is AddHabitSuccess) {
                 Navigator.pop(context);
-                allHabitCubit.getAllHabit(); // ✅ نستخدمه مباشرة
+                context.read<AllHabitCubit>().getAllHabit();
               } else if (state is AddHabitError) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text(state.error)),

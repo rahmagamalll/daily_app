@@ -1,25 +1,31 @@
 import 'package:daily_app/core/helper/spacing.dart';
-import 'package:daily_app/core/theming/colors.dart';
 import 'package:daily_app/core/theming/styles.dart';
 import 'package:daily_app/core/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-// ignore: must_be_immutable
 class PersonalInfoForm extends StatelessWidget {
-   PersonalInfoForm({super.key, this.onChangedFirstName, this.onChangedLastName});
-void Function(String)? onChangedFirstName;
-void Function(String)?  onChangedLastName;
+  final void Function(String)? onChangedFirstName;
+  final void Function(String)? onChangedLastName;
+
+  const PersonalInfoForm({
+    super.key,
+    this.onChangedFirstName,
+    this.onChangedLastName,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'Personal Info',
-          style: TextStylesManager.font18BlackRegular.copyWith(
-            color: ColorsManager.black,
+          style: TextStylesManager.font18Regular(context).copyWith(
+            color: theme.textTheme.bodyLarge?.color,
             fontSize: 20.sp,
             fontWeight: FontWeight.w600,
           ),
@@ -33,18 +39,17 @@ void Function(String)?  onChangedLastName;
                 children: [
                   Text(
                     'First name',
-                    style: TextStylesManager.font16BlackRegular,
+                    style: TextStylesManager.font16Regular(context),
                   ),
                   verticalSpacing(10),
                   Container(
                     decoration: BoxDecoration(
-                      color: const Color(0xffF3F3F3),
+                      color:
+                          isDark ? Colors.grey[800] : const Color(0xffF3F3F3),
                       borderRadius: BorderRadius.circular(8.r),
                     ),
                     child: CustomTextFormField(
-                      onChanged: (value) {
-                        onChangedFirstName!(value);
-                      },
+                      onChanged: onChangedFirstName,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your first name';
@@ -57,7 +62,7 @@ void Function(String)?  onChangedLastName;
                         vertical: 13.h,
                       ),
                       borderRadius: BorderRadius.circular(8.r),
-                      hintStyle: TextStylesManager.font16MediumGrayRegular,
+                      hintStyle: TextStylesManager.font16Medium(context),
                     ),
                   ),
                 ],
@@ -69,17 +74,15 @@ void Function(String)?  onChangedLastName;
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Last name', style: TextStylesManager.font16BlackRegular),
+            Text('Last name', style: TextStylesManager.font16Regular(context)),
             verticalSpacing(10),
             Container(
               decoration: BoxDecoration(
-                color: const Color(0xffF3F3F3),
+                color: isDark ? Colors.grey[800] : const Color(0xffF3F3F3),
                 borderRadius: BorderRadius.circular(8.r),
               ),
               child: CustomTextFormField(
-                onChanged: (value) {
-                  onChangedLastName!(value);
-                },
+                onChanged: onChangedLastName,
                 hintText: "last name",
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -92,7 +95,7 @@ void Function(String)?  onChangedLastName;
                   vertical: 13.h,
                 ),
                 borderRadius: BorderRadius.circular(8.r),
-                hintStyle: TextStylesManager.font16MediumGrayRegular,
+                hintStyle: TextStylesManager.font16Medium(context),
               ),
             ),
           ],

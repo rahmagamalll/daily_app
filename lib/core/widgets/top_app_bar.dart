@@ -37,7 +37,7 @@ class TopAppBar extends StatelessWidget {
         ),
         Text(
           title,
-          style: TextStylesManager.font18BlackRegular,
+          style: TextStylesManager.font18Regular(context),
         ),
         SizedBox(
           width: 35.w,

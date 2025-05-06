@@ -1,3 +1,5 @@
+import 'package:daily_app/core/helper/share_pref_helper.dart';
+import 'package:daily_app/core/helper/shared_pref_keys.dart';
 import 'package:daily_app/core/helper/spacing.dart';
 import 'package:daily_app/core/widgets/custom_elevation_button.dart';
 import 'package:daily_app/core/widgets/top_app_bar.dart';
@@ -9,15 +11,30 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // ignore: must_be_immutable
-class ProfileScreen extends StatelessWidget {
-  ProfileScreen({super.key});
+class ProfileScreen extends StatefulWidget {
+  final void Function(bool)? onThemeChanged;
+
+  ProfileScreen({super.key, this.onThemeChanged});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   String? firstname;
+
   String? lastname;
+
   String? imagePathFromGallery;
+
+  bool isDarkMode = false;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -47,6 +64,31 @@ class ProfileScreen extends StatelessWidget {
                                 lastname = value;
                               },
                             ),
+                            verticalSpacing(20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Dark Mode',
+                                  style: TextStyle(
+                                    fontFamily: 'Nunito',
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                Switch(
+                                  value: isDark ? true : false,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      isDarkMode = value;
+                                    });
+                                    SharePrefHelper.setData(
+                                        SharedPrefKeys.isdark, value);
+                                    widget.onThemeChanged?.call(value);
+                                  },
+                                ),
+                              ],
+                            )
                           ],
                         ),
                       ),
@@ -63,8 +105,9 @@ class ProfileScreen extends StatelessWidget {
                                       .updateTopAppBarInfo(
                                         firstname!,
                                         lastname!,
-                                        imagePathFromGallery?? '',
+                                        imagePathFromGallery ?? '',
                                       );
+
                                   Navigator.pop(context, true);
                                 }
                               },

@@ -18,26 +18,34 @@ class AddHabitForm extends StatefulWidget {
 class _AddHabitFormState extends State<AddHabitForm> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
   String? title, content;
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Form(
-      autovalidateMode: autovalidateMode,
       key: formKey,
       child: Column(
         children: [
           const SizedBox(height: 60),
-          CustomTextFormField(
-            borderRadius: BorderRadius.all(Radius.circular(10.r)),
-            onChanged: (data) => title = data,
-            hintText: 'Title',
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter a title';
-              }
-              return null;
-            },
+          Container(
+            decoration: BoxDecoration(
+              color: isDark ? Colors.grey[800] : const Color(0xffF3F3F3),
+              borderRadius: BorderRadius.all(
+                Radius.circular(10.r),
+              ),
+            ),
+            child: CustomTextFormField(
+              borderRadius: BorderRadius.all(Radius.circular(10.r)),
+              onChanged: (data) => title = data,
+              hintText: 'Title',
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a title';
+                }
+                return null;
+              },
+            ),
           ),
           const SizedBox(height: 20),
           CustomElevationButton(
@@ -54,9 +62,6 @@ class _AddHabitFormState extends State<AddHabitForm> {
                     backgroundColor: ColorsManager.green,
                   ),
                 );
-              } else {
-                autovalidateMode = AutovalidateMode.always;
-                setState(() {});
               }
             },
             title: 'Add',

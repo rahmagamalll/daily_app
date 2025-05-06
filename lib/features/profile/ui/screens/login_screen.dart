@@ -29,7 +29,7 @@ class LoginScreen extends StatelessWidget {
               children: [
                 Text(
                   'Login',
-                  style: TextStylesManager.font18BlackRegular,
+                  style: TextStylesManager.font18Regular(context),
                 ),
                 Expanded(
                   child: CustomScrollView(

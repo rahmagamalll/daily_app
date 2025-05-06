@@ -37,7 +37,7 @@ class CustomPieChart extends StatelessWidget {
       chartRadius: chartRadius,
       centerText: finalDegreeOf100,
       centerTextStyle: centerTextStyle ??
-          TextStylesManager.font16MediumGreyMedium
+          TextStylesManager.font16Medium(context)
               .copyWith(color: ColorsManager.green),
       ringStrokeWidth: 9,
       chartType: ChartType.ring,
@@ -51,7 +51,7 @@ class CustomPieChart extends StatelessWidget {
       legendOptions: LegendOptions(
         legendShape: BoxShape.circle,
         showLegends: false,
-        legendTextStyle: TextStylesManager.font12BlackRegular
+        legendTextStyle: TextStylesManager.font12Regular(context)
             .copyWith(fontWeight: FontWeight.w500),
         legendPosition: LegendPosition.right,
         showLegendsInRow: false,

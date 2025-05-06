@@ -17,7 +17,7 @@ class ChangeImagePlus extends StatelessWidget {
         radius: 15.r,
         child: Text(
           "+",
-          style: TextStylesManager.font18BlackRegular.copyWith(
+          style: TextStylesManager.font18Regular(context).copyWith(
           color: ColorsManager.white,
           ),
         ),
