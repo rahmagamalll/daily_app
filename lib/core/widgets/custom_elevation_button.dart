@@ -58,7 +58,7 @@ class CustomElevationButton extends StatelessWidget {
             Center(
               child: Text(
                 title ?? "",
-                style: style ?? TextStylesManager.font16WhiteMedium,
+                style: style ?? TextStylesManager.font16WhiteMedium(),
               ),
             ),
       ),

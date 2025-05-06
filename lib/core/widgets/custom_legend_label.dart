@@ -23,7 +23,8 @@ class CustomLegendLabel extends StatelessWidget {
         horizontalSpacing(5),
         Text(
           '$degree% $typedegree',
-          style: TextStylesManager.font16BlackMedium.copyWith(fontSize: 12.sp),
+          style: TextStylesManager.font16Regular(context)
+              .copyWith(fontSize: 12.sp),
         ),
       ],
     );

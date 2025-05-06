@@ -1,18 +1,19 @@
 import 'dart:io';
 
-import 'package:daily_app/core/helper/extensions.dart';
 import 'package:daily_app/core/helper/share_pref_helper.dart';
 import 'package:daily_app/core/helper/shared_pref_keys.dart';
-import 'package:daily_app/core/routing/routes.dart';
 import 'package:daily_app/core/theming/colors.dart';
 import 'package:daily_app/core/theming/styles.dart';
 import 'package:daily_app/features/home/logic/cubit/manage_top_app_bar_cubit.dart';
+import 'package:daily_app/features/profile/ui/screens/profile_screen.dart';
+import 'package:daily_app/features/statistics/ui/statistics_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomeTopAppBar extends StatefulWidget {
-  const HomeTopAppBar({super.key});
+  const HomeTopAppBar({super.key, required this.toggleTheme});
+  final void Function(bool) toggleTheme;
 
   @override
   State<HomeTopAppBar> createState() => _HomeTopAppBarState();
@@ -85,7 +86,7 @@ class _HomeTopAppBarState extends State<HomeTopAppBar> {
           children: [
             Text(
               'HI, $name $lastName',
-              style: TextStylesManager.font18BlackBold.copyWith(
+              style: TextStylesManager.font18Bold(context).copyWith(
                 fontSize: 24.sp,
                 fontWeight: FontWeight.w600,
               ),
@@ -93,7 +94,11 @@ class _HomeTopAppBarState extends State<HomeTopAppBar> {
             const Spacer(),
             IconButton(
               onPressed: () {
-                context.pushNamed(Routes.statScreen);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => StatisticsScreen(),
+                    ));
               },
               icon: Icon(
                 Icons.stacked_bar_chart_rounded,
@@ -103,7 +108,14 @@ class _HomeTopAppBarState extends State<HomeTopAppBar> {
             ),
             GestureDetector(
               onTap: () {
-                context.pushNamed(Routes.profileScreen);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => ProfileScreen(
+                      onThemeChanged: widget.toggleTheme,
+                    ),
+                  ),
+                );
               },
               child: CircleAvatar(
                 radius: 22.r,

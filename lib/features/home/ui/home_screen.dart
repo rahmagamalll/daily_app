@@ -8,7 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, required this.toggleTheme});
+  final void Function(bool) toggleTheme;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -28,7 +29,9 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 verticalSpacing(8),
-                HomeTopAppBar(),
+                HomeTopAppBar(
+                  toggleTheme: widget.toggleTheme,
+                ),
                 verticalSpacing(20),
                 Expanded(
                   child: BlocBuilder<AllHabitCubit, AllHabitState>(

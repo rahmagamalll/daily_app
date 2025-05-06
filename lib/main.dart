@@ -30,6 +30,7 @@ void main() async {
 
   // التحقق مما إذا كان المستخدم قد سجل الدخول
   bool isLogin = await SharePrefHelper.getBool(SharedPrefKeys.login);
+  bool isdark = await SharePrefHelper.getBool(SharedPrefKeys.isdark);
   // التأكد من تهيئة ScreenUtil
   await ScreenUtil.ensureScreenSize();
 
@@ -56,6 +57,7 @@ void main() async {
         ),
       ],
       child: DailyApp(
+        isdark: isdark,
         isLogin: isLogin,
       ),
     ),

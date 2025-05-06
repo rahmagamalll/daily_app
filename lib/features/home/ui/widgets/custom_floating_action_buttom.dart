@@ -9,12 +9,15 @@ class CustomeFloatingActionBotton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return FloatingActionButton(
       onPressed: () async {
-        final allHabitCubit = context.read<AllHabitCubit>();
         await showModalBottomSheet(
           isScrollControlled: true,
-          backgroundColor: ColorsManager.white,
+          backgroundColor: isDark
+              ? const Color.fromARGB(255, 31, 30, 30)
+              : ColorsManager.white,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(24),
@@ -24,7 +27,7 @@ class CustomeFloatingActionBotton extends StatelessWidget {
           context: context,
           builder: (context) {
             return BuildShowBottomSheet(
-              allHabitCubit: allHabitCubit,
+              context: context,
             );
           },
         );

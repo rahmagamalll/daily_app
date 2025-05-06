@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 abstract class ColorsManager {
-  static Color primaryColor = Colors.deepPurple[300]!;
+  static Color primaryColor = Colors.blue[300]!;
   static const Color white = Colors.white;
   static const Color green = Colors.green;
   static const Color black = Colors.black;

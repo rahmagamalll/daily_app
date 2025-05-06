@@ -10,7 +10,9 @@ class AppRouter {
     switch (settings.name) {
       case Routes.homeScreen:
         return _createPageTransition(
-          child: const HomeScreen(),
+          child:  HomeScreen(
+            toggleTheme: (settings.arguments as Function(bool)),
+          ),
           transitionType: PageTransitionType.fade,
         );
       case Routes.loginScreen:
