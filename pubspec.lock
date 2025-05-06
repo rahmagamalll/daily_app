@@ -39,7 +39,7 @@ packages:
     source: hosted
     version: "2.12.0"
   bloc:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: bloc
       sha256: "52c10575f4445c61dd9e0cafcc6356fdd827c4c64dd7945ef3c4105f6b6ac189"
@@ -550,7 +550,7 @@ packages:
     source: hosted
     version: "0.11.1"
   meta:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: meta
       sha256: e3641ec5d63ebf0d9b41bd43201a66e3fc79a65db5f61fc181f04cd27aab950c
@@ -702,7 +702,7 @@ packages:
     source: hosted
     version: "1.5.0"
   shared_preferences:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: shared_preferences
       sha256: "6e8bf70b7fef813df4e9a36f658ac46d107db4b4cfe1048b477d4e453a8159f5"

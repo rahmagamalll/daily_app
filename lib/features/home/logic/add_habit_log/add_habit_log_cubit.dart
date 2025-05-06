@@ -1,10 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:daily_app/constants.dart';
+import 'package:daily_app/core/helper/hive_fun_helper.dart';
 import 'package:daily_app/features/home/data/models/habit_log.dart';
 import 'package:hive/hive.dart';
 import 'package:meta/meta.dart';
 
-import '../../../../services/weekly_statistics_service.dart';
 
 part 'add_habit_log_state.dart';
 
@@ -34,7 +34,7 @@ class AddHabitLogCubit extends Cubit<AddHabitLogState> {
       if (existingLog.completed == habitLog.completed) {
         print(
             'Habit log is already up to date: ${existingLog.habitName} on ${existingLog.date}');
-        await WeeklyStatisticsService.saveWeeklyStatistics();
+        await HiveFunctionsHelper.saveWeeklyStatistics();
         // إذا كانت حالة العادة لم تتغير، لا حاجة لتحديثها.
         emit(AddHabitLogSuccess(message: 'Habit log is already up to date'));
       } else {
@@ -43,7 +43,7 @@ class AddHabitLogCubit extends Cubit<AddHabitLogState> {
         habitLogBox.put(existingLog.key, existingLog); // تحديث السجل
         print(
             'Habit log updated: ${existingLog.habitName} on ${existingLog.date}');
-        await WeeklyStatisticsService.saveWeeklyStatistics();
+        await HiveFunctionsHelper.saveWeeklyStatistics();
         emit(AddHabitLogSuccess(message: 'Habit log updated successfully'));
       }
     } catch (e) {

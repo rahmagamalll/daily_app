@@ -1,5 +1,5 @@
 import 'package:daily_app/constants.dart';
-import 'package:daily_app/core/helper/hive_fun.dart';
+import 'package:daily_app/core/helper/hive_fun_helper.dart';
 import 'package:daily_app/features/home/data/models/habit_log.dart';
 import 'package:daily_app/features/home/data/models/habit_model.dart';
 import 'package:daily_app/features/home/ui/widgets/daily_item.dart';
@@ -32,8 +32,9 @@ class HabitsListVeiw extends StatelessWidget {
             final habit = habitsList[index];
             return FutureBuilder(
               future: Future.wait([
-                isHabitCompleted(habit.name, DateTime.now(), habitLogBox),
-                getCompletedCountForHabit(habit.name),
+                HiveFunctionsHelper()
+                    .isHabitCompleted(habit.name, DateTime.now(), habitLogBox),
+                HiveFunctionsHelper().getCompletedCountForHabit(habit.name),
               ]),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -59,4 +60,3 @@ class HabitsListVeiw extends StatelessWidget {
     );
   }
 }
-

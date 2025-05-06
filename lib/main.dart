@@ -4,7 +4,7 @@ import 'package:daily_app/core/helper/shared_pref_keys.dart';
 import 'package:daily_app/daily_app.dart';
 import 'package:daily_app/features/home/data/models/habit_log.dart';
 import 'package:daily_app/features/home/data/models/habit_model.dart';
-import 'package:daily_app/features/home/data/models/weekly_statistics.dart';
+import 'package:daily_app/features/statistics/data/models/weekly_statistics.dart';
 import 'package:daily_app/features/home/logic/add_habit/add_habit_cubit.dart';
 import 'package:daily_app/features/home/logic/add_habit_log/add_habit_log_cubit.dart';
 import 'package:daily_app/features/home/logic/all_habit/all_habit_cubit.dart';
@@ -18,10 +18,9 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await setupGetIt();
   await Hive.initFlutter();
   Hive.registerAdapter<WeeklyStatistics>(WeeklyStatisticsAdapter());
-  await Hive.openBox<WeeklyStatistics>('weekly_stats');
+  await Hive.openBox<WeeklyStatistics>(Constants.hiveWeeklyStatisticsBox);
 
   // تسجيل المحولات (Adapters) للأنواع المستخدمة في Hive
   Hive.registerAdapter<Habit>(HabitAdapter());

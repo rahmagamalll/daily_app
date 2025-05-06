@@ -1,9 +1,9 @@
+import 'package:daily_app/core/helper/hive_fun_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../core/widgets/habits_statistics_widget.dart';
+import 'widgets/habits_statistics_widget.dart';
 import '../../../core/widgets/top_app_bar.dart';
-import '../../../core/widgets/weekly_statistics_widget.dart';
-import '../../../services/weekly_statistics_service.dart';
+import 'widgets/weekly_statistics_widget.dart';
 
 class StatisticsScreen extends StatefulWidget {
   const StatisticsScreen({super.key});
@@ -16,7 +16,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
   @override
   void initState() {
     super.initState();
-    WeeklyStatisticsService.saveWeeklyStatistics();
+    HiveFunctionsHelper.saveWeeklyStatistics();
   }
 
   @override
