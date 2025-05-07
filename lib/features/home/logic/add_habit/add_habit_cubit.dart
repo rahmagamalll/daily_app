@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:daily_app/constants.dart';
 import 'package:daily_app/core/helper/hive_fun_helper.dart';
 import 'package:daily_app/features/home/data/models/habit_model.dart';
-import 'package:daily_app/main.dart';
 import 'package:hive/hive.dart';
 import 'package:meta/meta.dart';
 
@@ -10,12 +9,14 @@ part 'add_habit_state.dart';
 
 class AddHabitCubit extends Cubit<AddHabitState> {
   AddHabitCubit() : super(AddHabitInitial());
+  
   void addHabit(Habit habit) async {
     emit(AddHabitLoading());
     try {
       var habitBox = Hive.box<Habit>(Constants.hiveHabitNameBox);
       await habitBox.add(habit);
-      await storeHabitsAtStartOfDay();
+
+      await HiveFunctionsHelper.storeHabitsAtStartOfDay();
       await HiveFunctionsHelper.saveWeeklyStatistics();
       print('Habit added: ${habit.name}');
 

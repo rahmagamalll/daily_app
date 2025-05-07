@@ -12,9 +12,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // ignore: must_be_immutable
 class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key, this.onThemeChanged});
   final void Function(bool)? onThemeChanged;
 
-  ProfileScreen({super.key, this.onThemeChanged});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();

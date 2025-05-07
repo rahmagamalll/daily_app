@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 
 import 'package:daily_app/constants.dart';
@@ -9,41 +8,79 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 class HiveFunctionsHelper {
- 
- Future<int> getCompletedCountForHabit(String habitName) async {
-  var habitLogBox = await Hive.openBox<HabitLog>(Constants.hiveHabitLogBox);
 
-  final count = habitLogBox.values.where(
-    (log) => log.habitName == habitName && log.completed,
-  ).length;
-
-  return count;
-}
-
-
-Future<bool> isHabitCompleted(
-  String habitName,
-  DateTime date,
-  Box<HabitLog> habitLogBox,
-) async {
+// Store habits at the start of the day
+ static Future<void> storeHabitsAtStartOfDay() async {
   try {
-    final habitLog = habitLogBox.values.firstWhere(
-      (log) =>
-          log.habitName == habitName &&
-          log.date.year == date.year &&
-          log.date.month == date.month &&
-          log.date.day == date.day,
-      orElse: () => throw Exception("No log found"),
-    );
+    print('Starting to store habits at the start of the day...');
 
-    return habitLog.completed;
+    var habitNamesBox = await Hive.openBox<Habit>(Constants.hiveHabitNameBox);
+    var habitLogBox = await Hive.openBox<HabitLog>(Constants.hiveHabitLogBox);
+
+    final today = DateTime.now();
+
+    for (var habit in habitNamesBox.values) {
+      final exists = habitLogBox.values.any(
+        (log) =>
+            log.habitName == habit.name &&
+            log.date.year == today.year &&
+            log.date.month == today.month &&
+            log.date.day == today.day,
+      );
+
+      if (!exists) {
+        habitLogBox.add(HabitLog(
+          habitName: habit.name,
+          date: today,
+          completed: false,
+        ));
+        print('Initialized log for habit: ${habit.name}');
+      } else {
+        print('Log already exists for habit: ${habit.name}');
+      }
+    }
   } catch (e) {
-    print('Error checking habit completion: $e');
-    return false;
+    print('Error while storing habit logs: $e');
   }
 }
 
-static Future<Map<String, double>> getHabitsStatistics() async {
+//count completed habits for a specific habit name
+  Future<int> getCompletedCountForHabit(String habitName) async {
+    var habitLogBox = await Hive.openBox<HabitLog>(Constants.hiveHabitLogBox);
+    final count = habitLogBox.values
+        .where(
+          (log) => log.habitName == habitName && log.completed,
+        )
+        .length;
+    return count;
+  }
+
+// Check if a habit is completed for a specific date
+  Future<bool> isHabitCompleted(
+    String habitName,
+    DateTime date,
+    Box<HabitLog> habitLogBox,
+  ) async {
+    try {
+      final habitLog = habitLogBox.values.firstWhere(
+        (log) =>
+            log.habitName == habitName &&
+            log.date.year == date.year &&
+            log.date.month == date.month &&
+            log.date.day == date.day,
+        orElse: () => throw Exception("No log found"),
+      );
+
+      return habitLog.completed;
+    } catch (e) {
+      // ignore: avoid_print
+      print('Error checking habit completion: $e');
+      return false;
+    }
+  }
+
+// get count of completed habits for statistics
+  static Future<Map<String, double>> getHabitsStatistics() async {
     final habitLogBox = await Hive.openBox<HabitLog>(Constants.hiveHabitLogBox);
     final habitNameBox = await Hive.openBox<Habit>(Constants.hiveHabitNameBox);
     Map<String, double> statistics = {};
@@ -52,21 +89,17 @@ static Future<Map<String, double>> getHabitsStatistics() async {
     final currentHabitNames =
         habitNameBox.values.map((habit) => habit.name).toList();
 
-    // Get all habits from Hive
+    // If the habit exists in statistics, increment its count
     for (var habitLog in habitLogBox.values) {
-      // Only count habits that still exist
       if (habitLog.completed &&
           currentHabitNames.contains(habitLog.habitName)) {
-        // If the habit exists in statistics, increment its count
         if (statistics.containsKey(habitLog.habitName)) {
           statistics[habitLog.habitName] = statistics[habitLog.habitName]! + 1;
         } else {
-          // If it's the first completion for this habit
           statistics[habitLog.habitName] = 1;
         }
       }
     }
-
     // If there are no completed habits, add a default value to avoid empty chart
     if (statistics.isEmpty) {
       statistics['No completed habits'] = 1;
@@ -75,14 +108,15 @@ static Future<Map<String, double>> getHabitsStatistics() async {
     return statistics;
   }
 
+  // Generate a list of distinct colors based on the number of habits
   static List<Color> getHabitColors(int count) {
-    // Generate a list of distinct colors based on the number of habits
     return List.generate(count, (index) {
       return Colors.primaries[index % Colors.primaries.length];
     });
   }
 
-    static Future<void> saveWeeklyStatistics() async {
+// Save weekly statistics to Hive
+  static Future<void> saveWeeklyStatistics() async {
     final now = DateTime.now();
     final weekStart = now.subtract(Duration(days: now.weekday - 1));
     final weekStartStr =
@@ -102,11 +136,13 @@ static Future<Map<String, double>> getHabitsStatistics() async {
     await statsBox.put(weekStartStr, weeklyStats);
   }
 
+// Get the weekly statistics for the current week
   static Future<List<WeeklyStatistics>> getAllWeeklyStatistics() async {
     final statsBox = await Hive.openBox<WeeklyStatistics>('weekly_stats');
     return statsBox.values.toList();
   }
 
+// Get the weekly statistics for a specific week
   static Future<Map<String, double>> _calculateWeeklyStatistics() async {
     final habitLogBox = await Hive.openBox<HabitLog>(Constants.hiveHabitLogBox);
     final habitNameBox = await Hive.openBox<Habit>(Constants.hiveHabitNameBox);
@@ -118,7 +154,6 @@ static Future<Map<String, double>> getHabitsStatistics() async {
     final weekStart = now.subtract(Duration(days: now.weekday - 1));
     final weekEnd = weekStart.add(const Duration(days: 6));
 
-    // احسب لكل العادات حتى اللي count بتاعها صفر
     for (var name in currentHabitNames) {
       statistics[name] = 0;
     }
@@ -135,9 +170,10 @@ static Future<Map<String, double>> getHabitsStatistics() async {
     return statistics;
   }
 
+// get top and least habits by sorting the statistics
   static Future<Map<String, dynamic>> _getTopAndLeastHabits(
       Map<String, double> statistics) async {
-    // هنا بنستخدم statistics اللي فيها كل العادات حتى اللي count بتاعها صفر
+
     final sortedHabits = statistics.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
 
@@ -156,7 +192,4 @@ static Future<Map<String, double>> getHabitsStatistics() async {
       'least': {'name': sortedHabits.last.key, 'count': sortedHabits.last.value}
     };
   }
-  
 }
-
-

@@ -15,8 +15,6 @@ class AddHabitLogCubit extends Cubit<AddHabitLogState> {
     emit(AddHabitLogLoading());
     try {
       var habitLogBox = Hive.box<HabitLog>(Constants.hiveHabitLogBox);
-
-      // البحث عن سجل العادة في نفس اليوم
       final existingLog = habitLogBox.values.firstWhere(
         (log) =>
             log.habitName == habitLog.habitName &&
@@ -35,12 +33,10 @@ class AddHabitLogCubit extends Cubit<AddHabitLogState> {
         print(
             'Habit log is already up to date: ${existingLog.habitName} on ${existingLog.date}');
         await HiveFunctionsHelper.saveWeeklyStatistics();
-        // إذا كانت حالة العادة لم تتغير، لا حاجة لتحديثها.
         emit(AddHabitLogSuccess(message: 'Habit log is already up to date'));
       } else {
-        // إذا كان السجل فارغًا أو يتطلب التحديث، نقوم بتحديثه أو إضافته
         existingLog.completed = habitLog.completed;
-        habitLogBox.put(existingLog.key, existingLog); // تحديث السجل
+        habitLogBox.put(existingLog.key, existingLog); 
         print(
             'Habit log updated: ${existingLog.habitName} on ${existingLog.date}');
         await HiveFunctionsHelper.saveWeeklyStatistics();

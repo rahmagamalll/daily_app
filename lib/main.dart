@@ -1,4 +1,5 @@
 import 'package:daily_app/constants.dart';
+import 'package:daily_app/core/helper/hive_fun_helper.dart';
 import 'package:daily_app/core/helper/share_pref_helper.dart';
 import 'package:daily_app/core/helper/shared_pref_keys.dart';
 import 'package:daily_app/daily_app.dart';
@@ -21,21 +22,18 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter<WeeklyStatistics>(WeeklyStatisticsAdapter());
   await Hive.openBox<WeeklyStatistics>(Constants.hiveWeeklyStatisticsBox);
-
-  // تسجيل المحولات (Adapters) للأنواع المستخدمة في Hive
   Hive.registerAdapter<Habit>(HabitAdapter());
   await Hive.openBox<Habit>(Constants.hiveHabitNameBox);
   Hive.registerAdapter<HabitLog>(HabitLogAdapter());
   await Hive.openBox<HabitLog>(Constants.hiveHabitLogBox);
 
-  // التحقق مما إذا كان المستخدم قد سجل الدخول
+
   bool isLogin = await SharePrefHelper.getBool(SharedPrefKeys.login);
   bool isdark = await SharePrefHelper.getBool(SharedPrefKeys.isdark);
-  // التأكد من تهيئة ScreenUtil
+
   await ScreenUtil.ensureScreenSize();
 
-  // تخزين العادات في بداية اليوم
-  await storeHabitsAtStartOfDay();
+  await HiveFunctionsHelper.storeHabitsAtStartOfDay();
 
   runApp(
     MultiBlocProvider(
@@ -64,36 +62,3 @@ void main() async {
   );
 }
 
-Future<void> storeHabitsAtStartOfDay() async {
-  try {
-    print('Starting to store habits at the start of the day...');
-
-    var habitNamesBox = await Hive.openBox<Habit>(Constants.hiveHabitNameBox);
-    var habitLogBox = await Hive.openBox<HabitLog>(Constants.hiveHabitLogBox);
-
-    final today = DateTime.now();
-
-    for (var habit in habitNamesBox.values) {
-      final exists = habitLogBox.values.any(
-        (log) =>
-            log.habitName == habit.name &&
-            log.date.year == today.year &&
-            log.date.month == today.month &&
-            log.date.day == today.day,
-      );
-
-      if (!exists) {
-        habitLogBox.add(HabitLog(
-          habitName: habit.name,
-          date: today,
-          completed: false,
-        ));
-        print('Initialized log for habit: ${habit.name}');
-      } else {
-        print('Log already exists for habit: ${habit.name}');
-      }
-    }
-  } catch (e) {
-    print('Error while storing habit logs: $e');
-  }
-}
