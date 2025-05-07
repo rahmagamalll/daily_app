@@ -24,4 +24,22 @@ class ManageTopAppBarCubit extends Cubit<ManageTopAppBarState> {
       emit(ManageTopAppBarError(error: e.toString()));
     }
   }
+
+  Future<void> updateTopAppBarimage(String photo) async {
+    emit(ManageTopAppBarLoading());
+    try {
+      var firstName = await SharePrefHelper.getString(SharedPrefKeys.userName);
+      var lastName =
+          await SharePrefHelper.getString(SharedPrefKeys.userLastName);
+      SharePrefHelper.setData(SharedPrefKeys.userPhoto, photo);
+
+      emit(ManageTopAppBarSuccess(
+        firstName: firstName!,
+        lastName: lastName!,
+        photo: photo,
+      ));
+    } catch (e) {
+      emit(ManageTopAppBarError(error: e.toString()));
+    }
+  }
 }

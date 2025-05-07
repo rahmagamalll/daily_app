@@ -30,11 +30,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String? imagePathFromGallery;
 
   bool isDarkMode = false;
+  @override
+  void initState() {
+    super.initState();
+    _loadThemeMode();
+  }
+
+  Future<void> _loadThemeMode() async {
+    final stored = await SharePrefHelper.getBool(SharedPrefKeys.isdark);
+    setState(() {
+      isDarkMode = stored ?? false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -77,7 +87,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                 ),
                                 Switch(
-                                  value: isDark ? true : false,
+                                  value: isDarkMode,
                                   onChanged: (value) {
                                     setState(() {
                                       isDarkMode = value;
@@ -105,7 +115,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       .updateTopAppBarInfo(
                                         firstname!,
                                         lastname!,
-                                        imagePathFromGallery ?? '',
+                                        imagePathFromGallery!,
                                       );
 
                                   Navigator.pop(context, true);

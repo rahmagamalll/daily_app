@@ -1,10 +1,9 @@
-import 'package:daily_app/core/helper/extensions.dart';
 import 'package:daily_app/core/helper/share_pref_helper.dart';
 import 'package:daily_app/core/helper/shared_pref_keys.dart';
 import 'package:daily_app/core/helper/spacing.dart';
-import 'package:daily_app/core/routing/routes.dart';
 import 'package:daily_app/core/theming/styles.dart';
 import 'package:daily_app/core/widgets/custom_elevation_button.dart';
+import 'package:daily_app/features/home/ui/home_screen.dart';
 import 'package:daily_app/features/profile/ui/widgets/personal_info_form.dart';
 import 'package:daily_app/features/profile/ui/widgets/user_image.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +38,7 @@ class LoginScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             verticalSpacing(20),
-                            UserImage(),
+                            UserImage(onChangedPhoto: (String ) {  },),
                             verticalSpacing(20),
                             PersonalInfoForm(
                               onChangedFirstName: (value) {
@@ -73,7 +72,9 @@ class LoginScreen extends StatelessWidget {
                                     true,
                                   );
 
-                                  context.pushNamed(Routes.homeScreen);
+                               Navigator.push(context, MaterialPageRoute(
+                                    builder: (context) =>HomeScreen(toggleTheme: (bool ) {  },),
+                                  ));
                                 }
                               },
                               title: 'Login',

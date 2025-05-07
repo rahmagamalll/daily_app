@@ -3,15 +3,17 @@ import 'package:daily_app/core/helper/share_pref_helper.dart';
 import 'package:daily_app/core/helper/shared_pref_keys.dart';
 import 'package:daily_app/core/theming/colors.dart';
 import 'package:daily_app/core/widgets/custom_snack_bar.dart';
+import 'package:daily_app/features/home/logic/cubit/manage_top_app_bar_cubit.dart';
 import 'package:daily_app/features/profile/ui/widgets/change_image_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 
 // ignore: must_be_immutable
 class UserImage extends StatefulWidget {
-  UserImage({Key? key, this.onChangedPhoto}) : super(key: key);
-  void Function(String)? onChangedPhoto;
+  UserImage({Key? key, required this.onChangedPhoto}) : super(key: key);
+  void Function(String) onChangedPhoto;
   @override
   _UserImageState createState() => _UserImageState();
 }
@@ -60,7 +62,11 @@ class _UserImageState extends State<UserImage> {
   Widget buildImage() {
     if (imagePathFromGallery != null &&
         File(imagePathFromGallery!).existsSync()) {
-      widget.onChangedPhoto!(imagePathFromGallery!);
+      widget.onChangedPhoto(imagePathFromGallery!);
+      context
+          .read<ManageTopAppBarCubit>()
+          .updateTopAppBarimage(imagePathFromGallery!);
+
       return Image.file(
         File(imagePathFromGallery!),
         width: 170.r,
