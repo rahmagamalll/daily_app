@@ -1,16 +1,23 @@
-# daily_app
+# 🧠 Daily Habit Tracker App
 
-A new Flutter project.
+A simple and elegant Flutter app to help you build and track daily habits with ease.
 
-## Getting Started
+## 📱 Features
 
-This project is a starting point for a Flutter application.
+- ✅ Track your daily habits with one tap.
+- ➕ Add new habits dynamically.
+- ❌ Delete unwanted habits.
+- 📊 Weekly and overall statistics.
+- 👤 Personal profile screen.
+- 🌙 Dark mode & ☀️ Light mode support.
+- 🗃️ Local storage using Hive database.
 
-A few resources to get you started if this is your first Flutter project:
+## 🛠 Built With
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- **Flutter** — for cross-platform UI.
+- **Hive** — for local NoSQL data storage.
+- **Bloc** or custom state management.
+- **ScreenUtil** — for responsive UI.
+- **Custom Theming** — Light/Dark modes.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
